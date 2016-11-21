@@ -4,8 +4,8 @@ const path = require('path');
 const peer = require('peer');
 const express = require('express');
 
-const DIR_CLIENT = path.resolve(__dirname, 'client');
-const DIR_NODE_MODULES = path.resolve(__dirname, 'node_modules');
+const DIR_CLIENT = path.resolve(__dirname, '../client');
+const DIR_NODE_MODULES = path.resolve(__dirname, '../node_modules');
 
 
 peer.PeerServer({ port: 9000, path: '/peerjs' });
