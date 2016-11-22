@@ -26,7 +26,6 @@ module.exports = ({ roomId, server }) => {
   <br/>
   <div class="b-video">
     <div id="peer-camera">
-      <video id="peer-video" autoplay></video>
     </div>
 
     <div id="my-camera">

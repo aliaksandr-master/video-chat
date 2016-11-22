@@ -5,52 +5,77 @@
   const peer = Config.server ? new Peer(Config.roomId, Config.peer) : new Peer(Config.peer);
 
   const navigator = window.navigator;
-  const getStreamUrl = (stream) =>
-    window.URL.createObjectURL(stream);
-
-  const $myVideo = document.getElementById('my-video');
-  const $friendVideo = document.getElementById('peer-video');
 
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
   let myStream = null;
   let myPeerId = null;
-  let friendPeerId = null;
-  let connection = null;
+
+  let friendsCounter = 0;
+  const friends = {};
+
+  const connect = (peerId, connection) =>
+    friends[peerId] = {
+      peerId,
+      connection,
+      index: friendsCounter++
+    };
 
   peer.on('open', () => {
     myPeerId = peer.id;
+
+    navigator.getUserMedia({ audio: true, video: true }, (stream) => {
+      myStream = stream;
+      document.getElementById('my-video').src = window.URL.createObjectURL(stream);
+
+      if (!Config.server) {
+        connect(Config.roomId, peer.connect(Config.roomId, { metadata: { friendPeer: myPeerId } }));
+      }
+    }, (err) => {
+      console.error(err);
+      alert('An error occured. Please try again');
+    });
   });
 
-  navigator.getUserMedia({ audio: true, video: true }, (stream) => {
-    myStream = stream;
-    $myVideo.src = getStreamUrl(stream);
+  const attachVideo = (index, stream) => {
+    const camera = document.getElementById('peer-camera');
+    const id = `peer-video-${index}`;
 
-    if (!Config.server) {
-      connection = peer.connect(Config.roomId, { metadata: { peerId: peer.id } });
+    let video = document.getElementById(id);
+
+    if (!video) {
+      camera.insertAdjacentHTML('beforeEnd', `<video id="${id}" autoplay></video>`);
+      video = document.getElementById(id);
     }
-  }, (err) => {
-    console.error(err);
-    alert('An error occured. Please try again');
-  });
 
-  peer.on('connection', (conn) => {
-    connection = conn;
+    video.src = window.URL.createObjectURL(stream);
 
-    friendPeerId = connection.peer;
+    for (const k in friends) {
+      if (friends.hasOwnProperty(k)) {
+        video = document.getElementById(`peer-video-${friends[k].index}`);
 
-    const call = peer.call(friendPeerId, myStream);
+        video.style.width = `${(100/friendsCounter).toFixed(2)}%`;
+      }
+    }
+  };
 
-    call.on('stream', (friendStream) => {
-      $friendVideo.src = getStreamUrl(friendStream);
+  peer.on('connection', (connection) => {
+    const friend = connect(connection.peer, connection);
+
+    const call = peer.call(connection.peer, myStream);
+
+    call.on('stream', (stream) => {
+      attachVideo(friend.index, stream);
     });
   });
 
   peer.on('call', (call) => {
+    const friend = friends[call.peer];
+
     call.answer(myStream);
 
-    call.on('stream', (friendStream) => {
-      $friendVideo.src = getStreamUrl(friendStream);
+    call.on('stream', (stream) => {
+      attachVideo(friend.index, stream);
     });
   });
 })(window);

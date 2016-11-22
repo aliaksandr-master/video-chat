@@ -20,17 +20,20 @@ body {
 }
 
 #peer-camera {
-  display: block;
   position: relative;
   width: 100%;
   margin: 0 auto;
   background: black;
+  min-height: 400px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-#peer-video {
+#peer-camera > video {
   display: block;
   width: 100%;
-  min-height: 300px;
 }
 
 #my-camera {
@@ -38,8 +41,8 @@ body {
   position: absolute;
   bottom: 5px;
   right: 5px;
-  width: 20%;
-  opacity: 0.8;
+  width: 16%;
+  opacity: 0.9;
 }
 
 #my-video {
