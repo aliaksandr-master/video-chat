@@ -12,7 +12,7 @@ const mainTemplate = () => `
         </div>
 
         <div id="my-camera">
-          <video id="my-video" autoplay></video>
+          <video id="my-video" autoplay muted></video>
         </div>      
       </div>
 
