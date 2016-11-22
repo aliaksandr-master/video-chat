@@ -18,7 +18,7 @@ module.exports = ({ roomId, server }) => {
 <div class="container" id="room">
   <div class="link-wr">
     <div class="pull-right">
-      <script>document.write('<a href="/room/founder/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
+      <script>document.write('<a href="/rf/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
     </div>
     <label class="pull-left">Send this link to your friend:</label>
     <script>document.write('<input readonly class="form-control" value="' + window.location.protocol + '//' + window.location.host + '/ra/${roomId}"/>');</script>
