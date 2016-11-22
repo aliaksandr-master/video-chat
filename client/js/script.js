@@ -1,49 +1,8 @@
 'use strict';
 
-const mainTemplate = () => `
-  <div class="container">
-    <div class="jumbotron">
-      <h4>YOUR <b>ID</b>: <span id="my-peer-id"></span></h4>
-      <h6>Friend: <span id="friend-email"></span></h6>
-
-      <div class="b-video">
-        <div id="peer-camera">
-          <video id="peer-video" autoplay></video>
-        </div>
-
-        <div id="my-camera">
-          <video id="my-video" autoplay muted></video>
-        </div>      
-      </div>
-
-      <div id="messenger-wrapper">
-        <form action="GET" id="login-form" class="row">
-          <div class="col-xs-5">
-            <input class="form-control" type="text" id="peer-id" placeholder="Friend ID (ask him)" required/>
-          </div>
-          <div class="col-xs-5">
-            <input class="form-control" type="email" id="email" placeholder="Your Email" pattern="[a-z0-9A-Z_-.]+@[a-z0-9A-Z_.]+[.][a-z0-9A-Z]{1,3}" required/>
-          </div>
-          <div class="col-xs-2">
-            <button class="btn btn-success btn-block" type="submit">Login</button>          
-          </div>
-        </form>
-
-        <div id="chat" class="hidden">
-          <div id="messages" class="b-messages"></div>
-          <form action="GET" id="message-form">
-            <textarea class="form-control" required type="text" name="message" id="message" placeholder="Message"></textarea>
-            <button class="btn btn-success" type="submit">Send message</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  `;
-
 ((window) => {
   const Config = window.APP_CONFIG;
-  const peer = new Peer(Config.peer);
+  const peer = Config.server ? new Peer(Config.roomId, Config.peer) : new Peer(Config.peer);
 
   const navigator = window.navigator;
   const md5 = (value) => window.CryptoJS.MD5(String(value)).toString();
@@ -54,9 +13,6 @@ const mainTemplate = () => `
   const getStreamUrl = (stream) =>
     window.URL.createObjectURL(stream);
 
-  document.body.insertAdjacentHTML('beforeBegin', mainTemplate());
-
-  const $friendPeerId = $$('peer-id');
   const $myVideo = $$('my-video');
   const $loginForm = $$('login-form');
   const $email = $$('email');
@@ -72,9 +28,7 @@ const mainTemplate = () => `
 
   let myStream = null;
   let myPeerId = null;
-  let myEmail = null;
   let friendPeerId = null;
-  let friendEmail = null;
   let connection = null;
 
   let messages = [];
@@ -90,66 +44,32 @@ const mainTemplate = () => `
   };
 
   peer.on('open', () => {
-    myPeerId = $myPearId.innerText = peer.id;
+    myPeerId = peer.id;
+    console.log(myPeerId);
   });
 
   navigator.getUserMedia({ audio: true, video: true }, (stream) => {
     myStream = stream;
     $myVideo.src = getStreamUrl(stream);
+
+    if (!Config.server) {
+      connection = peer.connect(Config.roomId, { metadata: { peerId: peer.id } });
+    }
   }, (err) => {
     console.log(err);
     alert('An error occured. Please try again');
   });
 
-
-
-  const showChat = () => {
-    $friendPeerId.classList.add('hidden');
-    $chat.classList.remove('hidden');
-  };
-
-
-
-  $loginForm.addEventListener('submit', (ev) => {
-    ev.preventDefault();
-
-    myEmail = $email.value;
-
-    connection = peer.connect($friendPeerId.value, {
-      metadata: { 'email': myEmail, username: myEmail }
-    });
-
-    connection.on('data', displayNewMessage);
-
-    showChat();
-  });
-
   peer.on('connection', (conn) => {
     connection = conn;
 
-    connection.on('data', displayNewMessage);
-
-    friendPeerId = $friendPeerId.value = connection.peer;
+    friendPeerId = connection.peer;
 
     const call = peer.call(friendPeerId, myStream);
 
     call.on('stream', (friendStream) => {
       $friendVideo.src = getStreamUrl(friendStream);
     });
-
-    friendEmail = $friendUserEmail.innerText = connection.metadata.email;
-  });
-
-  $messageForm.addEventListener('submit', (ev) => {
-    ev.preventDefault();
-
-    var message = { email: myEmail, text: $messageInput.value };
-
-    connection.send(message);
-
-    displayNewMessage(message);
-
-    $messageInput.value = '';
   });
 
   peer.on('call', (call) => {
