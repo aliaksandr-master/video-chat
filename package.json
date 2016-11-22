@@ -7,6 +7,6 @@
     "peerjs": "~0.3.14"
   },
   "scripts": {
-    "start": "node server/prod.js"
+    "start": "forever stop server/start.js && forever start server/start.js"
   }
 }
