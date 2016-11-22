@@ -16,15 +16,14 @@ module.exports = ({ roomId, server }) => {
 <body>
 
 <div class="container">
-  <div>
-    <a href="/">Home</a>
-    <script>document.write('<a class="btn btn-large btn-success" href="/room/founder/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
+  <div class="text-right">
+    <script>document.write('<a href="/room/founder/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
   </div>
   <br/>
   <div class="jumbotron">
     <div>
     <label class="form-label">Link for friend:</label>
-    <script>document.write('<input class="form-control" value="' + window.location.protocol + '//' + window.location.host + '/room/affiliated/${roomId}"/>');</script>
+    <script>document.write('<input class="form-control" value="' + window.location.protocol + '//' + window.location.host + '/ra/${roomId}"/>');</script>
     </div>
     <br/>
     <br/>

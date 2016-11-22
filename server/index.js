@@ -19,11 +19,11 @@ module.exports = ({ port, debug = false }) => {
 
   app.use('/client', express.static(path.resolve(__dirname, '../client')));
 
-  app.get('/room/founder/:roomId', (req, res) => {
+  app.get('/rf/:roomId', (req, res) => {
     res.send(template('./views/room.js')({ server: true, roomId: req.params.roomId }));
   });
 
-  app.get('/room/affiliated/:roomId', (req, res) => {
+  app.get('/ra/:roomId', (req, res) => {
     res.send(template('./views/room.js')({ server: false, roomId: req.params.roomId }));
   });
 

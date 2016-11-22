@@ -17,7 +17,7 @@ module.exports = () => {
 
 <div class="container">
   <div class="jumbotron" style="text-align: center;">
-    <script>document.write('<a class="btn btn-large btn-success" href="/room/founder/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
+    <script>document.write('<a class="btn btn-large btn-success" href="/rf/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
   </div>
 </div>
 </body>
