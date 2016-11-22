@@ -1,5 +1,41 @@
 'use strict';
 
+const throttle = (delay, method) => {
+  let prevCallTimestamp = 0;
+  let timer = 0;
+  let count = 0;
+
+  const apply = (that, args) => {
+    prevCallTimestamp = Date.now();
+    method.apply(that, args);
+
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+  };
+
+  return (...args) => {
+    const now = Date.now();
+    const that = this;
+
+    count++;
+
+    if (!prevCallTimestamp || now > (prevCallTimestamp + delay)) {
+      count = 0;
+      apply(that, args);
+
+      timer = setTimeout(() => {
+        timer = null;
+        if (count) {
+          count = 0;
+          apply(that, args);
+        }
+      }, delay);
+    }
+  };
+};
+
 ((window) => {
   const Config = window.APP_CONFIG;
   const peer = Config.server ? new Peer(Config.roomId, Config.peer) : new Peer(Config.peer);
@@ -68,6 +104,10 @@
       attachVideo(friend.index, stream);
     });
   });
+
+  peer.on('disconnected', throttle(1000, () => {
+    peer.reconnect();
+  }));
 
   peer.on('call', (call) => {
     const friend = friends[call.peer];
