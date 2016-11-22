@@ -1,6 +1,5 @@
 'use strict';
 
-const http = require('http');
-const app = require('./index')();
+const app = require('./index');
 
-http.createServer(app).listen(3000);
+app({ port: 3000 });

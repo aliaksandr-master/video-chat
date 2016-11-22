@@ -4,7 +4,7 @@
   "dependencies": {
     "express": "^4.14.0",
     "peer": "^0.2.8",
-    "peerjs": "~0.3.14"
+    "peerjs": "^0.3.14"
   },
   "scripts": {
     "start": "forever stop server/start.js && forever start server/start.js"

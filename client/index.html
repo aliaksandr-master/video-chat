@@ -12,21 +12,25 @@
 <body>
 
 <script>
-  var searchParam = function (name, defaults) {
-    var params = String(window.location.search).match(new RegExp('[?&]' + name + '=([^?&]+)'));
-
-    return params && params[1] ? String(params[1]) : String(defaults);
-  };
-
   window.APP_CONFIG = {
     peer: {
-      key: searchParam('key')
+      host: '/',
+      path: '/peer',
+      port: 80,
+      debug: 3,
+      secure: true/*,
+      config: {
+        'iceServers': [
+          { url: 'stun:stun1.l.google.com:19302' },
+          { url: 'turn:numb.viagenie.ca', credential: 'muazkh', username: 'webrtc@live.com' }
+        ]
+      }*/
     }
   }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core-min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5-min.js"></script>
-<script src="/node_modules/peerjs/dist/peer.min.js"></script>
-<script src="js/script.js"></script>
+<script src="/js/peer.js"></script>
+<script src="/js/script.js"></script>
 </body>
 </html>
