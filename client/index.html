@@ -12,18 +12,15 @@
 <body>
 
 <script>
+  var searchParam = function (name, defaults) {
+    var params = String(window.location.search).match(new RegExp('[?&]' + name + '=([^?&]+)'));
+
+    return params && params[1] ? String(params[1]) : String(defaults);
+  };
+
   window.APP_CONFIG = {
     peer: {
-      host: window.location.host,
-      port: 80,
-      path: '/peerjs',
-      debug: 3,
-      config: {
-        'iceServers': [
-          { url: 'stun:stun1.l.google.com:19302' },
-          { url: 'turn:numb.viagenie.ca', credential: 'muazkh', username: 'webrtc@live.com' }
-        ]
-      }
+      key: searchParam('key')
     }
   }
 </script>
