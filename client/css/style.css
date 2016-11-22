@@ -3,11 +3,19 @@ body {
   margin: 40px 0 0;
 }
 
+#room {
+  display: block;
+  max-width: 1024px;
+}
+
+.link-wr {
+  margin-bottom: 10px;
+}
+
 .b-video {
   display: block;
   width: 100%;
   position: relative;
-  height: 300px;
   margin: 0 auto;
 }
 
@@ -15,28 +23,29 @@ body {
   display: block;
   position: relative;
   width: 100%;
-  height: 300px;
   margin: 0 auto;
   background: black;
 }
 
 #peer-video {
+  display: block;
   width: 100%;
-  height: 100%;
+  min-height: 300px;
 }
 
 #my-camera {
   background: #444;
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 100px;
-  height: 100px;
+  bottom: 5px;
+  right: 5px;
+  width: 20%;
+  opacity: 0.8;
 }
 
 #my-video {
+  display: block;
   width: 100%;
-  height: 100%;
+  box-shadow: 0 1px 5px rgba(255,255,255,0.5);
 
   -moz-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);

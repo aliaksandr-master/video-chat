@@ -15,27 +15,22 @@ module.exports = ({ roomId, server }) => {
 </head>
 <body>
 
-<div class="container">
-  <div class="text-right">
-    <script>document.write('<a href="/room/founder/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
+<div class="container" id="room">
+  <div class="link-wr">
+    <div class="pull-right">
+      <script>document.write('<a href="/room/founder/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
+    </div>
+    <label class="pull-left">Send this link to your friend:</label>
+    <script>document.write('<input readonly class="form-control" value="' + window.location.protocol + '//' + window.location.host + '/ra/${roomId}"/>');</script>
   </div>
   <br/>
-  <div class="jumbotron">
-    <div>
-    <label class="form-label">Link for friend:</label>
-    <script>document.write('<input class="form-control" value="' + window.location.protocol + '//' + window.location.host + '/ra/${roomId}"/>');</script>
+  <div class="b-video">
+    <div id="peer-camera">
+      <video id="peer-video" autoplay></video>
     </div>
-    <br/>
-    <br/>
 
-    <div class="b-video">
-      <div id="peer-camera">
-        <video id="peer-video" autoplay></video>
-      </div>
-
-      <div id="my-camera">
-        <video id="my-video" autoplay muted></video>
-      </div>
+    <div id="my-camera">
+      <video id="my-video" autoplay muted></video>
     </div>
   </div>
 </div>
