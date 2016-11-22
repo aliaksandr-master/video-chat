@@ -17,7 +17,7 @@ module.exports = ({ port, debug = false }) => {
     return require(templatePath);
   };
 
-  app.use('/', express.static(path.resolve(__dirname, '../client')));
+  app.use('/client', express.static(path.resolve(__dirname, '../client')));
 
   app.get('/room/founder/:roomId', (req, res) => {
     res.send(template('./views/room.js')({ server: true, roomId: req.params.roomId }));
