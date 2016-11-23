@@ -33,6 +33,7 @@ module.exports = ({ roomId, server }) => {
       <canvas id="my-video-volume"/>  
     </div>
   </div>
+  <div class="b-road-map"><a class="b-road-map__link" href="https://trello.com/b/0Js6Oeln" target="_blank">Road Map (Trello)</a></div>
 </div>
 
 <script>

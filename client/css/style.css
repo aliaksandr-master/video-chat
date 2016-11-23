@@ -8,6 +8,11 @@ body {
   max-width: 1024px;
 }
 
+#index-page {
+  display: block;
+  max-width: 1024px;
+}
+
 .link-wr {
   margin-bottom: 10px;
 }
@@ -100,4 +105,14 @@ video + canvas {
   font-size: 14px;
   font-family: monospace;
   white-space: pre-line;
+}
+
+.b-road-map {
+  display: block;
+  margin: 10px 0 0;
+  text-align: center;
+}
+
+.b-road-map__link {
+
 }
