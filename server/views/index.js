@@ -14,9 +14,9 @@ module.exports = () => {
   <link rel="stylesheet" href="/client/css/style.css">
 </head>
 <body>
-  <div class="container" id="index">
-    <div class="jumbotron" style="text-align: center;">
-      <script>document.write('<a class="btn btn-large btn-success" href="/rf/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">Create New Room</a>')</script>
+  <div class="container b-index-page">
+    <div class="jumbotron b-index-pag__content" style="text-align: center;">
+      <script>document.write('<a class="btn btn-lg btn-primary" href="/rf/' + Date.now().toString(36) + Math.floor(Math.random() * 100000000).toString(36) + '">New Private Chat Room</a>')</script>
     </div>
     <div class="b-road-map"><a class="b-road-map__link" href="https://trello.com/b/0Js6Oeln" target="_blank">Road Map (Trello)</a></div>
   </div>
