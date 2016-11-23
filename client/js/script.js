@@ -1,49 +1,74 @@
 'use strict';
 
 ((window) => {
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
-  const audioContext = new AudioContext();
-  const meter = audioContext.createScriptProcessor(512);
+  let hasErrorWithWebAudio = false;
+  let audioContext = null;
+  const initAudioContext = () => {
+    if (hasErrorWithWebAudio || audioContext) {
+      return audioContext;
+    }
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+      audioContext = new AudioContext();
+    } catch (err) {
+      hasErrorWithWebAudio = true;
+    }
+
+    return audioContext;
+  };
 
   const $$ = (id) => document.getElementById(id);
 
   const initVolumeMeter = function (canvas, stream) {
-    const WIDTH = canvas.width = canvas.offsetWidth;
-    const HEIGHT = canvas.height = canvas.offsetHeight;
-    const mediaStreamSource = audioContext.createMediaStreamSource(stream);
-    const canvasContext = canvas.getContext("2d");
+    const audioContext = initAudioContext();
 
-    meter.onaudioprocess = function (event) {
-      var buf = event.inputBuffer.getChannelData(0);
-      var bufLength = buf.length;
-      var sum = 0;
-      var x;
+    if (hasErrorWithWebAudio) {
+      return;
+    }
 
-      for (var i = 0; i < bufLength; i++) {
-        x = buf[i];
-        sum += x * x;
-      }
+    try {
+      const WIDTH = canvas.width = canvas.offsetWidth;
+      const HEIGHT = canvas.height = canvas.offsetHeight;
+      const mediaStreamSource = audioContext.createMediaStreamSource(stream);
+      const canvasContext = canvas.getContext("2d");
 
-      this.volume = Math.max(Math.sqrt(sum / bufLength), this.volume * 0.95);
-    };
-    meter.volume = 0;
-    meter.connect(audioContext.destination);
-    meter.shutdown = function () {
-      this.disconnect();
-      this.onaudioprocess = null;
-    };
+      const meter = audioContext.createScriptProcessor(512);
 
-    mediaStreamSource.connect(meter);
+      meter.onaudioprocess = function (event) {
+        var buf = event.inputBuffer.getChannelData(0);
+        var bufLength = buf.length;
+        var sum = 0;
+        var x;
 
-    const drawLoop = () => {
-      canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
-      const height = meter.volume * HEIGHT * 1.4;
-      canvasContext.fillStyle = (HEIGHT - height) < (0.2 * HEIGHT) ? 'rgba(255,0,0,0.5)' : 'rgba(0,255,0,0.5)';
-      canvasContext.fillRect(0, HEIGHT - height, WIDTH, height);
-      window.requestAnimationFrame(drawLoop);
-    };
+        for (var i = 0; i < bufLength; i++) {
+          x = buf[i];
+          sum += x * x;
+        }
 
-    drawLoop();
+        this.volume = Math.max(Math.sqrt(sum / bufLength), this.volume * 0.95);
+      };
+      meter.volume = 0;
+      meter.connect(audioContext.destination);
+      meter.shutdown = function () {
+        this.disconnect();
+        this.onaudioprocess = null;
+      };
+
+      mediaStreamSource.connect(meter);
+
+      const drawLoop = () => {
+        canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
+        const height = meter.volume * HEIGHT * 1.4;
+        canvasContext.fillStyle = (HEIGHT - height) < (0.2 * HEIGHT) ? 'rgba(255,0,0,0.5)' : 'rgba(0,255,0,0.5)';
+        canvasContext.fillRect(0, HEIGHT - height, WIDTH, height);
+        window.requestAnimationFrame(drawLoop);
+      };
+
+      drawLoop();
+    } catch (ev) {
+      hasErrorWithWebAudio = true;
+    }
   };
 
 
