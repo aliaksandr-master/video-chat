@@ -30,6 +30,7 @@ module.exports = ({ roomId, server }) => {
 
     <div id="my-camera">
       <video id="my-video" autoplay muted></video>
+      <canvas id="my-video-volume"/>  
     </div>
   </div>
 </div>
