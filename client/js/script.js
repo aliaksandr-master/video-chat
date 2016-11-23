@@ -135,7 +135,7 @@
       myStream = stream;
       $$('my-video').src = window.URL.createObjectURL(stream);
 
-      initVolumeMeter($$('my-video-volume'), stream);
+      // initVolumeMeter($$('my-video-volume'), stream);
 
       if (!Config.server) {
         connect(Config.roomId, peer.connect(Config.roomId, { metadata: { friendPeer: myPeerId } }));
@@ -158,7 +158,7 @@
       video = $$(videoId);
       const canvas = $$(cavasId);
 
-      initVolumeMeter(canvas, stream);
+      // initVolumeMeter(canvas, stream);
     }
 
     video.src = window.URL.createObjectURL(stream);
